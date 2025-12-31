@@ -18,6 +18,10 @@
       background: radial-gradient(circle at bottom, #020111, #000);
       font-family: 'Segoe UI', sans-serif;
       color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     canvas {
@@ -26,7 +30,6 @@
       z-index: 0;
     }
 
-    /* CENTER WRAPPER */
     .center-wrapper {
       position: absolute;
       top: 50%;
@@ -40,15 +43,14 @@
       pointer-events: none;
     }
 
-    /* VIDEO */
     .ny-video {
       width: clamp(200px, 40vw, 450px);
       max-width: 90vw;
       border-radius: 18px;
       box-shadow: 0 0 45px rgba(255,255,255,0.35);
+      display: none; /* Hide initially */
     }
 
-    /* TEXT */
     .center-text {
       font-weight: 700;
       white-space: nowrap;
@@ -66,6 +68,7 @@
       animation: gradientMove 5s infinite alternate;
       text-shadow: 0 0 30px rgba(255,255,255,0.35);
       text-align: center;
+      display: none; /* Hide initially */
     }
 
     @keyframes gradientMove {
@@ -73,7 +76,6 @@
       100% { background-position: 100% 50%; }
     }
 
-    /* FOOTER */
     footer {
       position: absolute;
       bottom: 10px;
@@ -85,11 +87,32 @@
       z-index: 2;
       pointer-events: none;
     }
+
+    .start-btn {
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(45deg, #ff00cc, #00ffff, #ffff00, #ff4500);
+      color: white;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      z-index: 2;
+      transition: transform 0.2s;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
 
 <canvas id="canvas"></canvas>
+
+<!-- Start Button -->
+<button class="start-btn" id="startBtn">Click Me</button>
 
 <!-- VIDEO + TEXT -->
 <div class="center-wrapper">
@@ -97,7 +120,6 @@
     id="nyVideo"
     class="ny-video"
     src="manny.mp4"
-    autoplay
     loop
     playsinline
     preload="auto"
@@ -106,7 +128,6 @@
   <div class="center-text">
     HAPPY NEW YEAR EVERYONE 🎉
   </div>
- 
 </div>
 
 <footer>
@@ -114,17 +135,19 @@
 </footer>
 
 <script>
-/* VIDEO AUTOPLAY FORCE */
 const video = document.getElementById("nyVideo");
+const text = document.querySelector(".center-text");
+const startBtn = document.getElementById("startBtn");
 
-window.addEventListener("load", () => {
-  video.volume = 1.0; // Full volume
-  const playPromise = video.play(); // Try to force play
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => console.log("Video autoplay success"))
-      .catch(() => console.log("Autoplay blocked by browser"));
-  }
+// Start button click event
+startBtn.addEventListener("click", () => {
+  startBtn.style.display = "none"; // hide button
+  video.style.display = "block";    // show video
+  text.style.display = "block";     // show text
+
+  video.play()
+    .then(() => console.log("Video is playing with sound"))
+    .catch(err => console.log("Error playing video:", err));
 });
 
 /* CANVAS SETUP */
